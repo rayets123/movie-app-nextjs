@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "title": "Movie App - Популярные фильмы",
+    "description": "Просмотр популярных фильмов с использованием TMDb API"
+  },
+  "home": {
+    "title": "Популярные фильмы"
+  },
+  "moviesList": {
+    "loading": "Загрузка...",
+    "notFound": "Фильмы не найдены"
+  },
+  "genreFilter": {
+    "all": "Все жанры"
+  },
+  "pagination": {
+    "prev": "Назад",
+    "next": "Вперёд"
+  },
+  "moviePage": {
+    "backToList": "Назад к списку",
+    "ratings": "оценок",
+    "minutes": "мин",
+    "description": "Описание",
+    "noDescription": "Описание отсутствует",
+    "budget": "Бюджет",
+    "revenue": "Сборы",
+    "gallery": "Галерея",
+    "backdrops": "Кадры из фильма",
+    "posters": "Постеры",
+    "frameAlt": "{title} - кадр {index}",
+    "posterAlt": "{title} - постер {index}"
+  }
+}

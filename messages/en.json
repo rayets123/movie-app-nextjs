@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "title": "Movie App - Popular Movies",
+    "description": "Browse popular movies using the TMDb API"
+  },
+  "home": {
+    "title": "Popular Movies"
+  },
+  "moviesList": {
+    "loading": "Loading...",
+    "notFound": "No movies found"
+  },
+  "genreFilter": {
+    "all": "All Genres"
+  },
+  "pagination": {
+    "prev": "Previous",
+    "next": "Next"
+  },
+  "moviePage": {
+    "backToList": "Back to list",
+    "ratings": "ratings",
+    "minutes": "min",
+    "description": "Description",
+    "noDescription": "No description available",
+    "budget": "Budget",
+    "revenue": "Revenue",
+    "gallery": "Gallery",
+    "backdrops": "Stills",
+    "posters": "Posters",
+    "frameAlt": "{title} - still {index}",
+    "posterAlt": "{title} - poster {index}"
+  }
+}

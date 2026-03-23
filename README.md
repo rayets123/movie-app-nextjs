@@ -1,92 +1,107 @@
-# Movie App - Приложение для просмотра популярных фильмов
+# Movie App
 
-Приложение на Next.js для просмотра популярных фильмов с использованием TMDb API (The Movie Database API).
+A Next.js application for browsing popular movies using the TMDb API.
 
-## Возможности
+## Features
 
-- 📽️ Список самых популярных фильмов на главной странице
-- 🔍 Фильтрация по жанрам
-- 📄 Пагинация для навигации по страницам
-- 🎬 Детальная страница фильма с описанием и галереей изображений
-- 🖼️ Кадры из фильма и постеры
-- ⭐ Рейтинги и информация о фильмах
+- Popular movies list on the home page
+- Filter by genre
+- Pagination
+- Movie detail page with description, ratings and image gallery
+- Internationalization: Russian (default), English, Spanish
+- Language switcher in the header
+- Server Components for fast initial load
 
-## Настройка
+## Tech Stack
 
-### 1. Получение API ключа TMDb
+- **Next.js 15** — React framework (App Router)
+- **TypeScript** — type safety
+- **Tailwind CSS** — styling
+- **shadcn/ui** — UI components
+- **Zustand** — client state management
+- **next-intl** — i18n routing and translations
+- **TMDb API** — movie data
 
-1. Зарегистрируйтесь на [TMDb](https://www.themoviedb.org/)
-2. Перейдите в [настройки API](https://www.themoviedb.org/settings/api)
-3. Создайте новый API ключ (выберите "Developer" тип)
-4. Скопируйте ваш API ключ
+## Setup
 
-### 2. Установка зависимостей
+### 1. Get a TMDb API key
+
+1. Sign up at [TMDb](https://www.themoviedb.org/)
+2. Go to [API settings](https://www.themoviedb.org/settings/api)
+3. Create a new API key (choose "Developer")
+4. Copy your API key
+
+### 2. Install dependencies
 
 ```bash
 npm install
-# или
-yarn install
-# или
-pnpm install
 ```
 
-### 3. Настройка переменных окружения
+### 3. Configure environment variables
 
-Создайте файл `.env.local` в корне проекта:
-
-```bash
-cp .env.example .env.local
-```
-
-Откройте `.env.local` и замените `your_api_key_here` на ваш API ключ TMDb:
+Create a `.env.local` file in the project root:
 
 ```
-NEXT_PUBLIC_TMDB_API_KEY=ваш_api_ключ_здесь
+NEXT_PUBLIC_TMDB_API_KEY=your_api_key_here
 NEXT_PUBLIC_TMDB_BASE_URL=https://api.themoviedb.org/3
 ```
 
-## Запуск проекта
-
-Запустите сервер разработки:
+### 4. Run the development server
 
 ```bash
 npm run dev
-# или
-yarn dev
-# или
-pnpm dev
 ```
 
-Откройте [http://localhost:3000](http://localhost:3000) в браузере.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Структура проекта
+## Project Structure
 
 ```
 movie-app/
 ├── app/
-│   ├── movie/
-│   │   └── [id]/
-│   │       └── page.tsx      # Страница детального просмотра фильма
-│   ├── layout.tsx
-│   ├── page.tsx               # Главная страница со списком фильмов
+│   ├── [locale]/
+│   │   ├── layout.tsx          # Locale layout with header and NextIntlClientProvider
+│   │   ├── page.tsx            # Home page — movie list
+│   │   └── movie/[id]/
+│   │       └── page.tsx        # Movie detail page (Server Component)
+│   ├── layout.tsx              # Root pass-through layout
 │   └── globals.css
 ├── components/
-│   ├── MovieCard.tsx          # Карточка фильма
-│   ├── GenreFilter.tsx        # Фильтр по жанрам
-│   └── Pagination.tsx         # Компонент пагинации
+│   ├── ui/                     # shadcn/ui components
+│   ├── MovieCard.tsx
+│   ├── MoviesList.tsx
+│   ├── GenreFilter.tsx
+│   ├── Pagination.tsx
+│   └── LanguageSwitcher.tsx
+├── i18n/
+│   ├── routing.ts              # Locale config (ru default, en/es with prefix)
+│   ├── request.ts              # Server-side next-intl setup
+│   └── navigation.ts           # Locale-aware Link and useRouter
 ├── lib/
-│   └── tmdb.ts                # API клиент для TMDb
-└── public/
+│   ├── tmdb.ts                 # TMDb API client
+│   ├── store.ts                # Zustand store
+│   └── utils.ts
+├── messages/
+│   ├── ru.json
+│   ├── en.json
+│   └── es.json
+└── middleware.ts               # i18n routing + redirects
 ```
 
-## Технологии
+## i18n Routing
 
-- **Next.js 16** - React фреймворк
-- **TypeScript** - Типизация
-- **Tailwind CSS** - Стилизация
-- **TMDb API** - API для получения данных о фильмах
+| URL | Locale |
+|---|---|
+| `/` | Russian (default, no prefix) |
+| `/movie/123` | Russian |
+| `/en/` | English |
+| `/en/movie/123` | English |
+| `/es/` | Spanish |
+| `/es/movie/123` | Spanish |
 
-## Learn More
+## Links
 
 - [Next.js Documentation](https://nextjs.org/docs)
-- [TMDb API Documentation](https://developers.themoviedb.org/3)
+- [TMDb API Documentation](https://developer.themoviedb.org/docs)
+- [next-intl Documentation](https://next-intl.dev)
+- [shadcn/ui](https://ui.shadcn.com)
