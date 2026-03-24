@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/navigation';
@@ -14,59 +14,55 @@ export default function Home() {
   const locale = useLocale();
   const t = useTranslations('home');
   const language = localeToTmdbLanguage[locale] ?? 'ru-RU';
-  const hydratedRef = useRef(false);
 
-  const queryPage = useMemo(() => {
+  // URL — єдине джерело правди для page і genre
+  const currentPage = useMemo(() => {
     const page = Number(searchParams.get('page') ?? '1');
     return Number.isFinite(page) && page > 0 ? page : 1;
   }, [searchParams]);
 
-  const queryGenre = useMemo(() => {
-    const rawGenre = searchParams.get('genre');
-    if (!rawGenre) return null;
-    const parsed = Number(rawGenre);
+  const selectedGenre = useMemo(() => {
+    const raw = searchParams.get('genre');
+    if (!raw) return null;
+    const parsed = Number(raw);
     return Number.isFinite(parsed) ? parsed : null;
   }, [searchParams]);
 
-  const {
-    currentPage,
-    selectedGenre,
-    hydrateFromQuery,
-    fetchGenres,
-    fetchMovies,
-  } = useMovieStore();
-
-  useEffect(() => {
-    hydrateFromQuery(queryPage, queryGenre);
-    hydratedRef.current = true;
-  }, [queryPage, queryGenre, hydrateFromQuery]);
+  const { fetchGenres, fetchMovies, totalPages } = useMovieStore();
 
   useEffect(() => {
     fetchGenres(language);
   }, [fetchGenres, language]);
 
   useEffect(() => {
-    if (!hydratedRef.current) return;
-    fetchMovies(language);
+    fetchMovies(currentPage, selectedGenre, language);
   }, [currentPage, selectedGenre, fetchMovies, language]);
 
-  useEffect(() => {
-    if (!hydratedRef.current) return;
+  const handlePageChange = (page: number) => {
     const params = new URLSearchParams();
-    params.set('page', currentPage.toString());
+    params.set('page', page.toString());
     if (selectedGenre) params.set('genre', selectedGenre.toString());
-    const nextQuery = params.toString();
-    const currentQuery = searchParams.toString();
-    if (nextQuery !== currentQuery) {
-      router.push(`/?${nextQuery}`);
-    }
-  }, [currentPage, selectedGenre, router, searchParams]);
+    router.push(`/?${params.toString()}`);
+  };
+
+  const handleGenreChange = (genreId: number | null) => {
+    const params = new URLSearchParams();
+    params.set('page', '1');
+    if (genreId) params.set('genre', genreId.toString());
+    router.push(`/?${params.toString()}`);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-8 text-gray-900">{t('title')}</h1>
-        <MoviesList />
+        <MoviesList
+          currentPage={currentPage}
+          totalPages={totalPages}
+          selectedGenre={selectedGenre}
+          onPageChange={handlePageChange}
+          onGenreChange={handleGenreChange}
+        />
       </div>
     </div>
   );

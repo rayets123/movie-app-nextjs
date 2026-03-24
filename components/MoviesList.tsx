@@ -6,19 +6,23 @@ import MovieCard from '@/components/MovieCard';
 import GenreFilter from '@/components/GenreFilter';
 import Pagination from '@/components/Pagination';
 
-export default function MoviesList() {
+interface MoviesListProps {
+  currentPage: number;
+  totalPages: number;
+  selectedGenre: number | null;
+  onPageChange: (page: number) => void;
+  onGenreChange: (genreId: number | null) => void;
+}
+
+export default function MoviesList({
+  currentPage,
+  totalPages,
+  selectedGenre,
+  onPageChange,
+  onGenreChange,
+}: MoviesListProps) {
   const t = useTranslations('moviesList');
-  const {
-    movies,
-    genres,
-    currentPage,
-    totalPages,
-    selectedGenre,
-    loading,
-    error,
-    setPage,
-    setGenre,
-  } = useMovieStore();
+  const { movies, genres, loading, error } = useMovieStore();
 
   return (
     <>
@@ -26,7 +30,7 @@ export default function MoviesList() {
         <GenreFilter
           genres={genres}
           selectedGenre={selectedGenre}
-          onGenreChange={setGenre}
+          onGenreChange={onGenreChange}
         />
       )}
 
@@ -53,7 +57,7 @@ export default function MoviesList() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={setPage}
+            onPageChange={onPageChange}
           />
         </>
       )}
